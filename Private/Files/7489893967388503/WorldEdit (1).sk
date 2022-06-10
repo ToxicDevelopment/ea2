@@ -1,0 +1,131 @@
+command //wand:
+	trigger:
+		player is op
+		give player wooden axe named "&e&k|||&bWorldEdit&e&k|||" 
+		send "&dYou have been given the World Edit wand" to player
+		
+On leftclick:
+	player's tool is wooden axe named "&e&k|||&bWorldEdit&e&k|||"
+	player is op
+	cancel event
+	clicked block is not air block
+	set {we.pos2.x.%player%} to rounded down x coordinate of clicked block
+	set {we.pos2.y.%player%} to rounded down y coordinate of clicked block
+	set {we.pos2.z.%player%} to rounded down z coordinate of clicked block
+	set {_exloc} to location of player
+	set {_rx} to rounded down x coord of player
+	set {_ry} to rounded down y coord of player
+	set {_rz} to rounded down z coord of player
+	set {_0x} to location of block {_rx} west of block at {_exloc}
+	set {_0y} to location of block {_ry} below block at {_0x}
+	set {_0.0.0} to location of block {_rz} north of block at {_0y}
+	if {we.pos1.x.%player%} is set:
+		if {we.pos1.x.%player%} is greater than {we.pos2.x.%player%}:
+			set {_xmax} to 1
+			set {_xmin} to 2
+		else:
+			set {_xmax} to 2
+			set {_xmin} to 1
+		if {we.pos1.y.%player%} is greater than {we.pos2.y.%player%}:
+			set {_ymax} to 1
+			set {_ymin} to 2
+		else:
+			set {_ymax} to 2
+			set {_ymin} to 1
+		if {we.pos1.z.%player%} is greater than {we.pos2.z.%player%}:
+			set {_zmax} to 1
+			set {_zmin} to 2
+		else:
+			set {_zmax} to 2
+			set {_zmin} to 1
+		clear {we.sel.%player%::*}
+		loop integers between {we.pos%{_xmin}%.x.%player%} and {we.pos%{_xmax}%.x.%player%}:
+			set {_curx} to location of block loop-integer-1 east of block at {_0.0.0}
+			loop integers between {we.pos%{_ymin}%.y.%player%} and {we.pos%{_ymax}%.y.%player%}:
+				set {_cury} to location of block loop-integer-2 above block at {_curx}
+				loop integers between {we.pos%{_zmin}%.z.%player%} and {we.pos%{_zmax}%.z.%player%}:
+					set {_final} to location of block loop-integer-3 south of block at {_cury}
+					add {_final} to {we.sel.%player%::*}
+		send "&dFirst position set to (%{we.pos2.x.%player%}%, %{we.pos2.y.%player%}%, %{we.pos2.z.%player%}%). (%size of {we.sel.%player%::*}%)" to player
+	else:
+		send "&dFirst position set to (%{we.pos2.x.%player%}%, %{we.pos2.y.%player%}%, %{we.pos2.z.%player%}%)." to player
+	
+On rightclick:
+	player's tool is wooden axe named "&e&k|||&bWorldEdit&e&k|||"
+	player is op
+	cancel event
+	clicked block is not air block
+	set {we.pos1.x.%player%} to rounded down x coordinate of clicked block
+	set {we.pos1.y.%player%} to rounded down y coordinate of clicked block
+	set {we.pos1.z.%player%} to rounded down z coordinate of clicked block
+	set {_exloc} to location of player
+	set {_rx} to rounded down x coord of player
+	set {_ry} to rounded down y coord of player
+	set {_rz} to rounded down z coord of player
+	set {_0x} to location of block {_rx} west of block at {_exloc}
+	set {_0y} to location of block {_ry} below block at {_0x}
+	set {_0.0.0} to location of block {_rz} north of block at {_0y}
+	if {we.pos2.x.%player%} is set:
+		if {we.pos1.x.%player%} is greater than {we.pos2.x.%player%}:
+			set {_xmax} to 1
+			set {_xmin} to 2
+		else:
+			set {_xmax} to 2
+			set {_xmin} to 1
+		if {we.pos1.y.%player%} is greater than {we.pos2.y.%player%}:
+			set {_ymax} to 1
+			set {_ymin} to 2
+		else:
+			set {_ymax} to 2
+			set {_ymin} to 1
+		if {we.pos1.z.%player%} is greater than {we.pos2.z.%player%}:
+			set {_zmax} to 1
+			set {_zmin} to 2
+		else:
+			set {_zmax} to 2
+			set {_zmin} to 1
+		clear {we.sel.%player%::*}
+		loop integers between {we.pos%{_xmin}%.x.%player%} and {we.pos%{_xmax}%.x.%player%}:
+			set {_curx} to location of block loop-integer-1 east of block at {_0.0.0}
+			loop integers between {we.pos%{_ymin}%.y.%player%} and {we.pos%{_ymax}%.y.%player%}:
+				set {_cury} to location of block loop-integer-2 above block at {_curx}
+				loop integers between {we.pos%{_zmin}%.z.%player%} and {we.pos%{_zmax}%.z.%player%}:
+					set {_final} to location of block loop-integer-3 south of block at {_cury}
+					add {_final} to {we.sel.%player%::*}
+		send "&dSecond position set to (%{we.pos1.x.%player%}%, %{we.pos1.y.%player%}%, %{we.pos1.z.%player%}%). (%size of {we.sel.%player%::*}%)" to player
+	else:
+		send "&dSecond position set to %{we.pos1.x.%player%}%, %{we.pos1.y.%player%}%, %{we.pos1.z.%player%}%)." to player
+	
+On break:
+	player's tool is wooden axe named "&e&k|||&bWorldEdit&e&k|||"
+	player is op
+	cancel event
+
+command //set <itemtype>:
+	trigger:
+		player is op
+		if {we.sel.%player%::*} is not set:
+			send "&cMake a region selection first!" to player
+			stop
+		loop {we.sel.%player%::*}:
+			block at loop-value is not argument
+			set block at loop-value to argument
+			add 1 to {_change}
+		send "&d%{_change}% block(s) changed." to player
+		
+command //cut:
+	trigger:
+		player is op
+		if {we.sel.%player%::*} is not set:
+			send "&cMake a region selection first!" to player
+			stop
+		loop {we.sel.%player%::*}:
+			block at loop-value is not air 
+			set block at loop-value to air
+			add 1 to {_change}
+		send "&d%{_change}% block(s) changed." to player
+		
+
+		
+
+	

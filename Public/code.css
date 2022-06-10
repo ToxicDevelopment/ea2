@@ -1,0 +1,13 @@
+body {
+    color: #d1cfc1;
+
+    background-color: #66677a;
+
+    font-family: Georgia, serif;
+}
+
+pre {
+    border: solid 7px #4d4d5c;
+
+    background-color: #4d4d5c; 
+}
